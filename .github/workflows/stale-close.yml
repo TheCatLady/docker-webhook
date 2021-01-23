@@ -1,0 +1,24 @@
+name: Close Stale Issues & Pull Requests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  stale:
+    name: Close stale issues & pull requests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Close stale issues & pull requests
+        uses: actions/stale@v3.0.15
+        with:
+          days-before-stale: 60
+          days-before-close: 7
+          stale-issue-label: 💤 stale
+          exempt-issue-labels: 🚧 blocked
+          stale-issue-message: Marking this issue as stale because it has had no activity in the last 60 days. If there is no new activity in the next 7 days, the issue will be automatically closed.
+          stale-pr-label: 💤 stale
+          exempt-pr-labels: 🚧 blocked
+          stale-pr-message: Marking this pull request as stale because it has had no activity in the last 60 days. If there is no new activity in the next 7 days, the pull request will be automatically closed.

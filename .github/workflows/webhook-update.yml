@@ -1,0 +1,44 @@
+name: Update webhook
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-webhook:
+    name: Update webhook
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fetch latest webhook release
+        id: webhook
+        run: |
+          echo ::set-output name=release_tag::$(curl -sL https://api.github.com/repos/adnanh/webhook/releases/latest | jq -r ".tag_name")
+          echo ::set-output name=current_tag::$(< webhook.version)
+
+      - name: Update webhook version
+        if: steps.webhook.outputs.current_tag != steps.webhook.outputs.release_tag
+        run: |
+          echo ${{ steps.webhook.outputs.release_tag }} > webhook.version
+
+      - name: Create pull request
+        if: steps.webhook.outputs.current_tag != steps.webhook.outputs.release_tag
+        uses: peter-evans/create-pull-request@v3
+        with:
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: Update webhook from ${{ steps.webhook.outputs.current_tag }} to ${{ steps.webhook.outputs.release_tag }}
+          title: Update webhook from ${{ steps.webhook.outputs.current_tag }} to ${{ steps.webhook.outputs.release_tag }}
+          body: |
+            Updates [adnanh/webhook](https://github.com/adnanh/webhook) from ${{ steps.webhook.outputs.current_tag }} to ${{ steps.webhook.outputs.release_tag }}
+          labels: |
+            🛶 upstream
+            🤖 bot
+          branch: adnanh/webhook-${{ steps.webhook.outputs.release_tag }}
+          delete-branch: true
