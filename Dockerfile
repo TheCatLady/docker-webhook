@@ -12,6 +12,7 @@ RUN         apk --update --no-cache add tzdata tini
 ENV         WEBHOOK_VERBOSE=false \
             WEBHOOK_HOTRELOAD=false
 COPY        --from=BUILD_IMAGE /usr/local/bin/webhook /usr/local/bin/webhook
+COPY        entrypoint.sh /entrypoint.sh
 WORKDIR     /config
 EXPOSE      9000
 ENTRYPOINT  [ "/sbin/tini", "--" ]
