@@ -5,9 +5,7 @@ COPY        webhook.version .
 RUN         curl -#L -o webhook.tar.gz https://api.github.com/repos/adnanh/webhook/tarball/$(cat webhook.version) && \
             tar -xzf webhook.tar.gz --strip 1 &&  \
             go get -d && \
-            go build -o /usr/local/bin/webhook && \
-            apk del --purge build-deps && \
-            rm -rf /go
+            go build -o /usr/local/bin/webhook
 
 FROM        alpine:3.13.0
 RUN         apk --update --no-cache add tzdata tini
