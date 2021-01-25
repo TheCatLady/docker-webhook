@@ -50,8 +50,8 @@ docker run -d \
   -v /path/to/appdata/config:/config:ro \
   -p 9000:9000 \
   --restart always \
-  thecatlady/webhook:latest \
-  -verbose -debug -hotreload -hooks=hook-1.json -hooks=hook-2.json
+  thecatlady/webhook \
+  -verbose -hooks=hooks.yml -hotreload
 ```
 
 ## Updating

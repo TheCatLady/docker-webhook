@@ -8,10 +8,9 @@ RUN         curl -#L -o webhook.tar.gz https://api.github.com/repos/adnanh/webho
             go build -o /usr/local/bin/webhook
 
 FROM        alpine:3.13.0
-RUN         apk --update --no-cache add tzdata tini
+RUN         apk --update --no-cache add tini tzdata
 COPY        --from=BUILD_IMAGE /usr/local/bin/webhook /usr/local/bin/webhook
-COPY        entrypoint.sh /entrypoint.sh
 WORKDIR     /config
 EXPOSE      9000
-ENTRYPOINT  [ "/sbin/tini", "--", "/entrypoint.sh" ]
-CMD         [ "-verbose", "-debug", "-hotreload", "-hooks", "/config/hooks.json" ]
+ENTRYPOINT  ["/sbin/tini", "--", "/usr/local/bin/webhook"]
+CMD         ["-verbose", "-hotreload", "-hooks=hooks.yml"]
