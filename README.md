@@ -47,11 +47,12 @@ Run the following command to create the container:
 docker run -d \
   --name=webhook \
   -e TZ=America/New_York `#optional` \
+  -e WEBHOOK_VERBOSE="true" `#optional` \
+  -e WEBHOOK_HOTRELOAD="true" `#optional` \
   -v /path/to/appdata/config:/config:ro \
   -p 9000:9000 \
   --restart always \
-  thecatlady/webhook \
-  -verbose -hooks=hooks.yml -hotreload
+  thecatlady/webhook:latest
 ```
 
 ## Updating
@@ -86,6 +87,8 @@ The container image is configured using the following parameters passed at runti
 |Parameter|Function|
 |---|---|
 |`-e TZ=`|[TZ database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) of system time zone; e.g., `America/New_York`|
+|`-e WEBHOOK_VERBOSE`|Enable verbose webhook logs|
+|`-e WEBHOOK_HOTRELOAD`| Allow webhook to reload when changes are made to `hooks.yaml`|
 |`-v /path/to/appdata/config:/config:ro`|Container data directory (mounted as read-only); your JSON/YAML hook definition file should be placed in this folder<br/>(Replace `/path/to/appdata/config` with the desired path on your host)|
 |`-p 9000:9000`|Expose port `9000`<br/>(Necessary unless only accessing `webhook` via other containers in the same Docker network)|
 |`--restart`|Container [restart policy](https://docs.docker.com/engine/reference/run/#restart-policies---restart)<br/>(`always` or `unless-stopped` recommended)|
