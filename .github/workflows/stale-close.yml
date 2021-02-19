@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Close stale issues & pull requests
-        uses: actions/stale@v3.0.16
+        uses: actions/stale@v3.0.17
         with:
           days-before-stale: 60
           days-before-close: 7
