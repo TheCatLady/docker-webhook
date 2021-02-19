@@ -1,63 +1,68 @@
 - name: 🚧 blocked
-  color: f89406
+  color: 'f89406'
   description: This issue or pull request is blocked by a problem outside the scope of this project
   from_name: blocked
 
 - name: 🤖 bot
-  color: 008672
+  color: '008672'
   description: This issue or pull request was created by a bot
   from_name: bot
 
 - name: 🐞 bug
-  color: d73a4a
+  color: 'd73a4a'
   description: Something isn't working
   from_name: bug
 
 - name: 🧩 dependencies
-  color: fc7f8b
+  color: 'fc7f8b'
   description: Updates to dependencies
   from_name: dependencies
 
 - name: ✏️ documentation
-  color: 0075ca
+  color: '0075ca'
   description: Improvements or additions to documentation
   from_name: documentation
 
 - name: 👥 duplicate
-  color: cfd3d7
+  color: 'cfd3d7'
   description: This issue or pull request already exists
   from_name: duplicate
 
 - name: 🌟 enhancement
-  color: a2eeef
+  color: 'a2eeef'
   description: New feature or request
   from_name: enhancement
 
 - name: ⚠️ invalid
-  color: e4e669
+  color: 'e4e669'
   description: This doesn't seem right
   from_name: invalid
 
 - name: 💬 needs more info
-  color: d4c5f9
+  color: 'd4c5f9'
   description: Additional details are required to proceed
 
 - name: ❔ question
-  color: d876e3
+  color: 'd876e3'
   description: Clarification or help is requested
   from_name: question
 
+- name: 💖 sponsor
+  color: 'fccce9'
+  description: This issue or pull request was opened by a sponsor
+  from_name: sponsor
+
 - name: 💤 stale
-  color: f5f5f5
+  color: 'f5f5f5'
   description: This issue or pull request hasn't been updated in a while
   from_name: stale
 
 - name: 🛶 upstream
-  color: 7057ff
+  color: '7057ff'
   description: Issues or changes from upstream
   from_name: upstream
 
 - name: ⛔ won't fix
-  color: 666666
+  color: '666666'
   description: This will not be worked on
   from_name: wontfix
