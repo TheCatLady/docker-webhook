@@ -41,20 +41,14 @@ jobs:
 
       - name: Set Docker image metadata
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1
+        uses: crazy-max/ghaction-docker-meta@v2.1.1
         with:
           images: thecatlady/webhook,ghcr.io/thecatlady/webhook
-          tag-custom-only: true
-          tag-custom: |
+          flavor: |
+            latest=true
+          tags: |
             ${{ steps.webhook.outputs.version }}
-            latest
-          label-custom: |
-            maintainer=TheCatLady
-            org.opencontainers.image.title=webhook
-            org.opencontainers.image.description=A lightweight, minimal webhook container
-            org.opencontainers.image.url=https://github.com/TheCatLady/docker-webhook
-            org.opencontainers.image.documentation=https://github.com/TheCatLady/docker-webhook
-            org.opencontainers.image.source=https://github.com/TheCatLady/docker-webhook
+          labels: |
             org.opencontainers.image.version=${{ steps.webhook.outputs.version }}
 
       - name: Log in to Docker Hub
