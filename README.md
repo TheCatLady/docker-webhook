@@ -2,9 +2,8 @@
 
 [![Image Size](https://img.shields.io/docker/image-size/thecatlady/webhook/latest?style=flat-square&logoColor=white&logo=docker)](https://hub.docker.com/r/thecatlady/webhook)
 [![Last Commit](https://img.shields.io/github/last-commit/TheCatLady/docker-webhook?style=flat-square&logoColor=white&logo=github)](https://github.com/TheCatLady/docker-webhook)
-[![Build Status](https://img.shields.io/github/workflow/status/TheCatLady/docker-webhook/Build%20Docker%20Images?style=flat-square&logoColor=white&logo=github%20actions)](https://github.com/TheCatLady/docker-webhook)<br/>
-[![Become a GitHub Sponsor](https://img.shields.io/badge/github%20sponsors-become%20a%20sponsor-ff69b4?style=flat-square&logo=github%20sponsors)](https://github.com/sponsors/TheCatLady)
-[![Donate via PayPal](https://img.shields.io/badge/paypal-make%20a%20donation-blue?style=flat-square&logo=paypal)](http://paypal.me/DHoung)
+[![Build Status](https://img.shields.io/github/workflow/status/TheCatLady/docker-webhook/Build%20Docker%20Images?style=flat-square&logoColor=white&logo=github%20actions)](https://github.com/TheCatLady/docker-webhook)
+[![Become a GitHub Sponsor](https://img.shields.io/badge/github%20sponsors-help%20feed%20my%20cats!-ff69b4?style=flat-square&logo=github%20sponsors)](https://github.com/sponsors/TheCatLady)
 
 A lightweight, minimal [`webhook`](https://github.com/adnanh/webhook) container
 
@@ -83,13 +82,13 @@ docker image prune
 
 The container image is configured using the following parameters passed at runtime:
 
-|Parameter|Function|
-|---|---|
-|`-e TZ=`|[TZ database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) of system time zone; e.g., `America/New_York`|
-|`-v /path/to/appdata/config:/config:ro`|Container data directory (mounted as read-only); your JSON/YAML hook definition file should be placed in this folder<br/>(Replace `/path/to/appdata/config` with the desired path on your host)|
-|`-p 9000:9000`|Expose port `9000`<br/>(Necessary unless only accessing `webhook` via other containers in the same Docker network)|
-|`--restart`|Container [restart policy](https://docs.docker.com/engine/reference/run/#restart-policies---restart)<br/>(`always` or `unless-stopped` recommended)|
-|`-verbose -hooks=/config/hooks.yml -hotreload`|[`webhook` parameters](https://github.com/adnanh/webhook/blob/master/docs/Webhook-Parameters.md); replace `hooks.yml` with the name of your JSON/YAML hook definition file, and add/modify/remove arguments to suit your needs<br/>(Can omit if using this exact configuration; otherwise, all parameters must be specified, not just those modified)|
+| Parameter                                      | Function                                                                                                                                                                                                                                                                                                                                              |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-e TZ=`                                       | [TZ database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) of system time zone; e.g., `America/New_York`                                                                                                                                                                                                                        |
+| `-v /path/to/appdata/config:/config:ro`        | Container data directory (mounted as read-only); your JSON/YAML hook definition file should be placed in this folder<br/>(Replace `/path/to/appdata/config` with the desired path on your host)                                                                                                                                                       |
+| `-p 9000:9000`                                 | Expose port `9000`<br/>(Necessary unless only accessing `webhook` via other containers in the same Docker network)                                                                                                                                                                                                                                    |
+| `--restart`                                    | Container [restart policy](https://docs.docker.com/engine/reference/run/#restart-policies---restart)<br/>(`always` or `unless-stopped` recommended)                                                                                                                                                                                                   |
+| `-verbose -hooks=/config/hooks.yml -hotreload` | [`webhook` parameters](https://github.com/adnanh/webhook/blob/master/docs/Webhook-Parameters.md); replace `hooks.yml` with the name of your JSON/YAML hook definition file, and add/modify/remove arguments to suit your needs<br/>(Can omit if using this exact configuration; otherwise, all parameters must be specified, not just those modified) |
 
 ## Configuring Hooks
 
@@ -97,6 +96,6 @@ See [`adnanh/webhook`](https://github.com/adnanh/webhook) for documentation on h
 
 ## How to Contribute
 
-Show your support by starring this project! &#x1F31F;  Pull requests, bug reports, and feature requests are also welcome!
+Show your support by starring this project! &#x1F31F; Pull requests, bug reports, and feature requests are also welcome!
 
-You can also support me by [becoming a GitHub sponsor](https://github.com/sponsors/TheCatLady) or [making a one-time PayPal donation](http://paypal.me/DHoung) &#x1F496;
+You can also support me by [becoming a GitHub sponsor](https://github.com/sponsors/TheCatLady) or [making a one-time donation](https://github.com/sponsors/TheCatLady?frequency=one-time) &#x1F496;
