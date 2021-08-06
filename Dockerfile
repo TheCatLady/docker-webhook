@@ -1,4 +1,4 @@
-FROM        golang:1.16.6-alpine3.14 AS BUILD_IMAGE
+FROM        golang:1.16.7-alpine3.14 AS BUILD_IMAGE
 RUN         apk add --update --no-cache -t build-deps curl gcc libc-dev libgcc
 WORKDIR     /go/src/github.com/adnanh/webhook
 COPY        webhook.version .
