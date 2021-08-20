@@ -41,7 +41,7 @@ jobs:
 
       - name: Set Docker image metadata
         id: docker_meta
-        uses: docker/metadata-action@v3.4.0
+        uses: docker/metadata-action@v3.5.0
         with:
           images: thecatlady/webhook,ghcr.io/thecatlady/webhook
           flavor: |
