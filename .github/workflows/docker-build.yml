@@ -41,7 +41,7 @@ jobs:
 
       - name: Set Docker image metadata
         id: docker_meta
-        uses: docker/metadata-action@v3.4.0
+        uses: docker/metadata-action@v3.5.0
         with:
           images: thecatlady/webhook,ghcr.io/thecatlady/webhook
           flavor: |
@@ -68,7 +68,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2.6.1
+        uses: docker/build-push-action@v2.7.0
         with:
           context: .
           file: ./Dockerfile
