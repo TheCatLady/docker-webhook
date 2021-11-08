@@ -47,11 +47,6 @@
   description: Clarification or help is requested
   from_name: question
 
-- name: 💖 sponsor
-  color: 'fccce9'
-  description: This issue or pull request was opened by a sponsor
-  from_name: sponsor
-
 - name: 💤 stale
   color: 'f5f5f5'
   description: This issue or pull request hasn't been updated in a while
