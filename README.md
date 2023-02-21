@@ -94,6 +94,154 @@ The container image is configured using the following parameters passed at runti
 
 See [`adnanh/webhook`](https://github.com/adnanh/webhook) for documentation on how to define hooks.
 
+### Considerations for running inside the Docker container
+
+- The webhook processes inside the container to run as `root` so things like permissions need to be accounted for
+- The image includes `sh` (shell) to execute commands/scripts (it does not include `bash`)
+
+You can set your `execute-command` to be a shell script that checks if any of the commands required exist, and if not installs them. Check and then install is useful because it will check and install when the first webhook request is received after creating the container, but not reinstall every time a webhook is received.
+
+Here is an example of using webhook with git to retrieve the latest commit changes for a repository:
+
+---
+
+Example `docker-compose.yml`
+
+```yaml
+services:
+  webhook:
+    image: thecatlady/webhook
+    container_name: webhook
+    command: -verbose -hooks=hooks.yml -hotreload
+    environment:
+      - TZ=America/New_York #optional
+    volumes:
+      - /path/to/appdata/config:/config:ro
+      - /path/to/parent/git_folder:/opt/git
+      - /path/to/.ssh:/root/.ssh:ro
+    ports:
+      - 9000:9000
+    restart: always
+```
+
+In the above:
+
+- `/path/to/parent/git_folder` is one folder level above where the git repos exist (ex: `/home/myuser/git/` which contains multiple repos), you can mount your git repos however works for you
+- `/path/to/.ssh` in this example is `/home/myuser/.ssh` which contains a deploy key such as `id_ed25519` or `id_rsa`
+
+---
+
+Example `hooks.json` (placed at `/path/to/appdata/config/hooks.json`)
+
+```json
+[
+  {
+    "id": "my-hook-name",
+    "execute-command": "/config/run/git-checkout-force.sh",
+    "command-working-directory": "/opt/git/myrepo",
+    "include-command-output-in-response": true,
+    "include-command-output-in-response-on-error": true,
+    "pass-arguments-to-command": [
+      { "source": "payload", "name": "head_commit.id", "comment": "GIT_REF" },
+      {
+        "source": "string",
+        "name": "/opt/git/myrepo",
+        "comment": "GIT_DIR"
+      },
+      { "source": "string", "name": "1000", "comment": "PUID" },
+      { "source": "string", "name": "1000", "comment": "PGID" }
+    ],
+    "trigger-rule": {
+      "and": [
+        {
+          "match": {
+            "type": "payload-hmac-sha1",
+            "secret": "<YOUR_GITHUB_WEBHOOK_SECRET>",
+            "parameter": { "source": "header", "name": "X-Hub-Signature" }
+          }
+        },
+        {
+          "match": {
+            "type": "value",
+            "value": "refs/heads/main",
+            "parameter": { "source": "payload", "name": "ref" }
+          }
+        }
+      ]
+    }
+  }
+]
+```
+
+In the above:
+
+- The branch is expected to be `main`, you might need it to be `master` or something else
+- The `command-working-directory` is pointed at where the container will see the repo folder (mounted inside the container)
+- The elements inside `pass-arguments-to-command` will be passed to the `execute-command` as parameters (see below)
+
+---
+
+Example `git-checkout-force.sh` (placed at `/path/to/appdata/config/run/git-checkout-force.sh`)
+
+```shell
+#!/usr/bin/env sh
+
+# variables
+GIT_REF=${1}
+GIT_DIR=${2}
+PUID=${3}
+PGID=${4}
+
+# log date
+date
+
+# install git
+if ! command -v git > /dev/null 2>&1; then
+    apk add --no-cache \
+        git
+fi
+
+# install openssh
+if ! command -v ssh > /dev/null 2>&1; then
+    apk add --no-cache \
+        openssh
+fi
+
+# allow git with different ownership
+git config --global --add safe.directory ${GIT_DIR}
+
+# fetch from git
+git fetch --all
+
+# checkout git reference
+git checkout --force ${GIT_REF}
+
+# set ownership
+chown -R ${PUID}:${PGID} ${GIT_DIR}
+```
+
+In the above:
+
+- `GIT_REF` is the first argument, passed in when `webhook` runs the script. It should be the commit id (see `hooks.json above`)
+- `PUID` and `PGID` are the second/third arguments, passed in, later used to `chown`. Passing these from webhook allows multiple hooks with to be setup resulting in different file ownership in each working directory.
+- Log the date, just for the sake of it
+- Check if the `git` command exists. If not, install it using `apk` (the alpine package manager included in the base OS of the image)
+- Check if the `ssh` command exists. If not, install it
+- `git config --global --add safe.directory ${GIT_DIR}` newer versions of `git` care about who owns the files in the repository, so tell `git` this directory is safe to run the rest of the commands (since `root` is the user running `webhook` in the container). This can result in `root` being the owner of newly added or changed files, which we will handle below
+- `git fetch --all` to retrieve the latest changes from your git repository
+- `git checkout --force ${GIT_REF}` force checkout the referenced commit (passed in argument)
+- `chown -R ${PUID}:${PGID} ${GIT_DIR}` set the ownership of all the files in the repo using the `PUID` and `PGID` that are passed to the script from `hooks.json`
+
+---
+
+Important takeaways:
+
+- `webhook` runs in the container as root
+- all commands `webhook` executes via your `hooks.json` execute as root
+- you (may) need to `chown` at the end of your script so that `root` is not the owner of your files
+- the image does not include much tooling (ex: `git` or `ssh`) but you can install the tools you need in your script
+- when installing tooling, check if it exists before installing, so that you're not reinstalling every time you receive a webhook request
+
 ## How to Contribute
 
 Show your support by starring this project! &#x1F31F; Pull requests, bug reports, and feature requests are also welcome!
