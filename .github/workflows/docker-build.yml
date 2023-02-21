@@ -37,7 +37,7 @@ jobs:
       - name: Get webhook version
         id: webhook
         run: |
-          echo ::set-output name=version::$(< webhook.version)
+          echo "version=$(< webhook.version)" >> $GITHUB_OUTPUT
 
       - name: Set Docker image metadata
         id: docker_meta
@@ -68,7 +68,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile

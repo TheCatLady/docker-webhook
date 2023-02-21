@@ -19,8 +19,8 @@ jobs:
       - name: Fetch latest webhook release
         id: webhook
         run: |
-          echo ::set-output name=release_tag::$(curl -sL https://api.github.com/repos/adnanh/webhook/releases/latest | jq -r ".tag_name")
-          echo ::set-output name=current_tag::$(< webhook.version)
+          echo "release_tag=$(curl -sL https://api.github.com/repos/adnanh/webhook/releases/latest | jq -r '.tag_name')" >> $GITHUB_OUTPUT
+          echo "current_tag=$(< webhook.version)" >> $GITHUB_OUTPUT
 
       - name: Update webhook version
         if: steps.webhook.outputs.current_tag != steps.webhook.outputs.release_tag
